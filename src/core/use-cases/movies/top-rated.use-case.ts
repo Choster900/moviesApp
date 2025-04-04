@@ -8,7 +8,7 @@ export const topRatedMoviesUseCase = async (fetcher: HttpAdapter): Promise<Movie
 
     try {
 
-        const upcoming = await fetcher.get<PopularMoviesAndTopRatedResponse>('/upcoming')
+        const upcoming = await fetcher.get<PopularMoviesAndTopRatedResponse>('/top_rated')
 
         if (!upcoming) {
             throw new Error('Failed to fetch now playing movies');

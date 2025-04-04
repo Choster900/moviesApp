@@ -7,7 +7,7 @@ export const upCommingPlayingUseCase = async (fetcher: HttpAdapter): Promise<Mov
 
     try {
 
-        const nowPlaying = await fetcher.get<MovieGeneralResponse>('/now_playing')
+        const nowPlaying = await fetcher.get<MovieGeneralResponse>('/upcoming')
 
         if (!nowPlaying) {
             throw new Error('Failed to fetch now playing movies');

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react"
 import { Movie } from "../../core/entities/movie.entity"
-import {
-    moviesNowPlayingUseCase as fetchNowPlayingMovies,
-    moviesNowPlayingUseCase as fetchPopularMovies,
-    upCommingPlayingUseCase as fetchUpcomingMovies,
-    topRatedMoviesUseCase as fetchTopRatedMovies
-} from "../../core/use-cases"
+import * as movieUseCases from "../../core/use-cases"
 import { movieDbFetcher } from "../../config/adapters/movieDb.adapter"
+
+
+let popularPageNumber = 1
 
 export const useMovies = () => {
 
@@ -28,10 +26,10 @@ export const useMovies = () => {
                 upcomingMovies,
                 topRatedMovies,
             ] = await Promise.all([
-                fetchNowPlayingMovies(movieDbFetcher),
-                fetchPopularMovies(movieDbFetcher),
-                fetchUpcomingMovies(movieDbFetcher),
-                fetchTopRatedMovies(movieDbFetcher),
+                movieUseCases.moviesNowPlayingUseCase(movieDbFetcher),
+                movieUseCases.moviesPopulargUseCase(movieDbFetcher),
+                movieUseCases.upCommingPlayingUseCase(movieDbFetcher),
+                movieUseCases.topRatedMoviesUseCase(movieDbFetcher),
             ])
 
             setNowPlaying(nowPlayingMovies)
@@ -51,6 +49,19 @@ export const useMovies = () => {
         nowPlaying,
         popular,
         upcoming,
-        topRated
+        topRated,
+
+
+        //Methods
+        popularNextPage: async () => {
+            popularPageNumber++
+            const popularMovies = await movieUseCases.moviesPopulargUseCase(movieDbFetcher,
+                {
+                    page: popularPageNumber
+                }
+            )
+            setPopular([...popular, ...popularMovies])
+        }
+
     }
 }
